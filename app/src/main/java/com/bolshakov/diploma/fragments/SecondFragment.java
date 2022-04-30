@@ -31,7 +31,9 @@ import java.util.Objects;
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
     String choise;
 
     @Override
@@ -48,12 +50,7 @@ public class SecondFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
-            Toast.makeText(getActivity(), "user not null", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(getActivity(), "user null", Toast.LENGTH_SHORT).show();
-        }
+
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -74,13 +71,13 @@ public class SecondFragment extends Fragment {
         binding.buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //String id = databaseReference.getKey();
+                String id = databaseReference.getKey();
                 String name = binding.usernameRegText.getText().toString();
                 String password = binding.passwordRegText.getText().toString();
                 String confirmPassword = binding.passwordConfirmText.getText().toString();
                 String email = binding.emailRegText.getText().toString();
                 String admin = binding.radioAdminButton.getText().toString();
-                User user = new User("id", name,password,email, choise);
+                User user = new User(id, name,password,email, choise);
                 if (!TextUtils.isEmpty(name) &&!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)
                         && !TextUtils.isEmpty(email) && binding.radioGroup.getCheckedRadioButtonId() != -1){
 
@@ -89,6 +86,8 @@ public class SecondFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Intent intent;
                             if (task.isSuccessful()){
+                                databaseReference.setValue(user);
+
                                 if (user.membership.equals("Admin")){
                                     intent = new Intent(getActivity(), AdminActivity.class);
                                     startActivity(intent);

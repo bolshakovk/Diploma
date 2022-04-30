@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         databaseReference = FirebaseDatabase.getInstance().getReference(USER_KEY);
-
     }
 
     @Override

@@ -6,6 +6,10 @@ public class User {
     public String password;
     public String email;
 
+    public User(String toString, String toString1) {
+    }
+    public User() {
+    }
     public String getMembership() {
         return membership;
     }
