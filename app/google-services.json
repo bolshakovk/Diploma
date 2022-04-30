@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "522082025063",
+    "firebase_url": "https://diplomaproject-52389-default-rtdb.firebaseio.com",
+    "project_id": "diplomaproject-52389",
+    "storage_bucket": "diplomaproject-52389.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522082025063:android:6f86b9a24f74ebe57adec2",
+        "android_client_info": {
+          "package_name": "com.bolshakov.diploma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522082025063-g60v21ef3sgjojh2tb86omv1560dl65f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMSPQ7HNRVgNrzxvHnCYdjVK9FPN8E_ZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522082025063-g60v21ef3sgjojh2tb86omv1560dl65f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
