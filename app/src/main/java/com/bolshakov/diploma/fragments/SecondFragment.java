@@ -11,11 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bolshakov.diploma.AdminActivity;
 import com.bolshakov.diploma.EmployerActivity;
-import com.bolshakov.diploma.R;
 import com.bolshakov.diploma.User;
 import com.bolshakov.diploma.databinding.FragmentSecondBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,15 +24,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Objects;
-
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
     public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
-    String choise;
+    String choice;
 
     @Override
     public View onCreateView(
@@ -59,13 +55,13 @@ public class SecondFragment extends Fragment {
         binding.employerRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choise = "employer";
+                choice = "employer";
             }
         });
         binding.radioAdminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choise = "Admin";
+                choice = "Admin";
             }
         });
         binding.buttonDone.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +73,7 @@ public class SecondFragment extends Fragment {
                 String confirmPassword = binding.passwordConfirmText.getText().toString();
                 String email = binding.emailRegText.getText().toString();
                 String admin = binding.radioAdminButton.getText().toString();
-                User user = new User(id, name,password,email, choise);
+                User user = new User(id, name,password,email, choice);
                 if (!TextUtils.isEmpty(name) &&!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)
                         && !TextUtils.isEmpty(email) && binding.radioGroup.getCheckedRadioButtonId() != -1){
 
@@ -90,11 +86,10 @@ public class SecondFragment extends Fragment {
 
                                 if (user.membership.equals("Admin")){
                                     intent = new Intent(getActivity(), AdminActivity.class);
-                                    startActivity(intent);
                                 }else {
                                     intent = new Intent(getActivity(), EmployerActivity.class);
-                                    startActivity(intent);
                                 }
+                                startActivity(intent);
                                 Toast.makeText(getActivity(), "Sign up success", Toast.LENGTH_SHORT).show();
                             }else {
                                 Log.d("FirebaseAuth", "onComplete" + task.getException().getMessage());

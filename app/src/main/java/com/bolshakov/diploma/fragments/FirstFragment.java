@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirstFragment extends Fragment {
 
-private FragmentFirstBinding binding;
+    private FragmentFirstBinding binding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
     FirebaseUser currentUser = mAuth.getCurrentUser();
     public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
@@ -76,12 +76,11 @@ private FragmentFirstBinding binding;
                                         Toast.makeText(getActivity(), user.membership, Toast.LENGTH_LONG).show();
                                         if (user.membership.equals("employer")){
                                             intent = new Intent(getActivity(), EmployerActivity.class);
-                                            startActivity(intent);
                                         }
                                         else {
                                             intent = new Intent(getActivity(), AdminActivity.class);
-                                            startActivity(intent);
                                         }
+                                        startActivity(intent);
                                     }
 
                                     @Override
