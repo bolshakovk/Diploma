@@ -1,12 +1,16 @@
 package com.bolshakov.diploma.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,13 +28,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = mAuth.getCurrentUser();
-    public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
-    String choice;
+    public DatabaseReference databaseReference;
+    String role;
 
     @Override
     public View onCreateView(
@@ -55,52 +61,110 @@ public class SecondFragment extends Fragment {
         binding.employerRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choice = "employer";
+                role = "Employer";
             }
         });
         binding.radioAdminButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choice = "Admin";
+                role = "Admin";
             }
         });
         binding.buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = databaseReference.getKey();
-                String name = binding.usernameRegText.getText().toString();
-                String password = binding.passwordRegText.getText().toString();
-                String confirmPassword = binding.passwordConfirmText.getText().toString();
-                String email = binding.emailRegText.getText().toString();
-                String admin = binding.radioAdminButton.getText().toString();
-                User user = new User(id, name,password,email, choice);
-                if (!TextUtils.isEmpty(name) &&!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)
-                        && !TextUtils.isEmpty(email) && binding.radioGroup.getCheckedRadioButtonId() != -1){
+                registerUser();
+            }
+        });
+        binding.employerRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                role = "Employer";
+            }
+        });
+        binding.radioAdminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                role = "Admin";
+            }
+        });
+    }
 
-                    mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    @SuppressLint("ResourceType")
+    private void registerUser(){
+        String email = binding.emailRegText.getText().toString().trim();
+        String username = binding.usernameRegText.getText().toString().trim();
+        String password = binding.passwordRegText.getText().toString().trim();
+        String confirmPassword = binding.passwordConfirmText.getText().toString().trim();
+        RadioButton employerRadioButton = binding.employerRadioButton;
+
+        if (username.isEmpty()){
+            Log.d("tag", username);
+            binding.usernameRegText.setError("username is required!");
+            binding.usernameRegText.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()){
+            binding.passwordRegText.setError("password is required!");
+            binding.passwordRegText.requestFocus();
+            return;
+        }
+        if (password.length() < 6){
+            binding.passwordRegText.setError("password length must be over 6 symbols!");
+            binding.passwordRegText.requestFocus();
+            return;
+        }
+        if (confirmPassword.isEmpty()){
+            binding.passwordConfirmText.setError("password is required!");
+            binding.passwordConfirmText.requestFocus();
+            return;
+        }
+        if (!password.equals(confirmPassword)){
+            binding.passwordConfirmText.setError("passwords not equals!");
+            binding.passwordConfirmText.requestFocus();
+            return;
+        }
+        if (email.isEmpty()){
+            binding.emailRegText.setError("Email is required!");
+            binding.emailRegText.requestFocus();
+            return;
+        }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.emailRegText.setError("Enter a valid email!");
+            binding.emailRegText.requestFocus();
+            return;
+        }
+        if (binding.radioGroup.getCheckedRadioButtonId() <= 0){
+            binding.employerRadioButton.setError("Role is required!");
+            binding.employerRadioButton.requestFocus();
+            return;
+        }
+
+
+
+
+
+
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    User user = new User(username, email, role);
+                    FirebaseDatabase.getInstance().getReference("Users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Intent intent;
+                        public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                databaseReference.setValue(user);
+                                Toast.makeText(getActivity(), "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                Log.d("user", user.toString());
 
-                                if (user.membership.equals("Admin")){
-                                    intent = new Intent(getActivity(), AdminActivity.class);
-                                }else {
-                                    intent = new Intent(getActivity(), EmployerActivity.class);
-                                }
-                                startActivity(intent);
-                                Toast.makeText(getActivity(), "Sign up success", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Log.d("FirebaseAuth", "onComplete" + task.getException().getMessage());
-                                Toast.makeText(getActivity(), "Sing up failure", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getActivity(), "User has NOT been registered successfully", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                }else {
-                    Toast.makeText(getActivity(), "Что то не ввел", Toast.LENGTH_SHORT).show();
                 }
-                
             }
         });
     }

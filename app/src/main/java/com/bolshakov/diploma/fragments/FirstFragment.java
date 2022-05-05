@@ -2,7 +2,9 @@ package com.bolshakov.diploma.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.bolshakov.diploma.AdminActivity;
-import com.bolshakov.diploma.EmployerActivity;
 import com.bolshakov.diploma.R;
-import com.bolshakov.diploma.User;
 import com.bolshakov.diploma.databinding.FragmentFirstBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,13 +28,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();;
-    FirebaseUser currentUser = mAuth.getCurrentUser();
-    public DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
-    User user;
+    private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    public DatabaseReference databaseReference;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -59,42 +63,61 @@ public class FirstFragment extends Fragment {
         binding.logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (currentUser != null){
-
-                    mAuth.signInWithEmailAndPassword(binding.usernameLoginText.getText().toString(), binding.passwordLoginText.getText().toString())
-                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                loginUser();
+            }
+        });
+    }
+    private void loginUser(){
+        String email = binding.usernameLoginText.getText().toString().trim();
+        String password = binding.passwordLoginText.getText().toString().trim();
+        if (email.isEmpty()){
+            binding.usernameLoginText.setError("Email is required!");
+            binding.usernameLoginText.requestFocus();
+            return;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.usernameLoginText.setError("Email is incorrect!");
+            binding.usernameLoginText.requestFocus();
+            return;
+        }
+        if (password.isEmpty()){
+            binding.passwordLoginText.setError("Password is required!");
+            binding.passwordLoginText.requestFocus();
+            return;
+        }
+        if (password.length() < 6) {
+            binding.passwordLoginText.setError("Password requires minimum 6 character!");
+            binding.passwordLoginText.requestFocus();
+        }
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    currentUser = mAuth.getCurrentUser();
+                    Log.d("tag", currentUser.getUid());
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (task.isSuccessful()){
-                                databaseReference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Intent intent;
-                                        User user = snapshot.getValue(User.class);
-                                        Toast.makeText(getActivity(), user.membership, Toast.LENGTH_LONG).show();
-                                        if (user.membership.equals("employer")){
-                                            intent = new Intent(getActivity(), EmployerActivity.class);
-                                        }
-                                        else {
-                                            intent = new Intent(getActivity(), AdminActivity.class);
-                                        }
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                                Toast.makeText(getActivity(), "user  not null", Toast.LENGTH_LONG).show();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.child(currentUser.getUid()).exists()){
+                                Log.d("tag", "here is somebody");
+                                Log.d("tag", String.valueOf(snapshot.child(currentUser.getUid()).child("membership")));
+                                if (String.valueOf(snapshot.child(currentUser.getUid()).child("membership")).contains("Admin")) {
+                                    Log.d("tag", "somebody with membership Admin");
+                                }else if (String.valueOf(snapshot.child(currentUser.getUid()).child("membership")).contains("Employer")){
+                                    Log.d("tag", "somebody with membership Employer");
+                                }
                             }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
                 }else {
-                    Toast.makeText(getActivity(), "user null", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Failed to Login! Check your credentials", Toast.LENGTH_LONG).show();
                 }
             }
         });

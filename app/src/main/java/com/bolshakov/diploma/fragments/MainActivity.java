@@ -17,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
-    public String USER_KEY = "User";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     public DatabaseReference databaseReference;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference(USER_KEY);
     }
 
     @Override

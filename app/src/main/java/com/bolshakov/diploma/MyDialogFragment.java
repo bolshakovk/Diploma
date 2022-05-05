@@ -45,6 +45,7 @@ public class MyDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int id) {
                 m_TextCost = inputCost.getText().toString();
                 m_TextParam = inputParam.getText().toString();
+                Hardware hardware = new Hardware(m_TextParam, 123);
                 Toast.makeText(getActivity(), m_TextCost +"\t" + m_TextParam,
                         Toast.LENGTH_LONG).show();
             }
