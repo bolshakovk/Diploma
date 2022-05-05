@@ -1,7 +1,6 @@
 package com.bolshakov.diploma;
 
 public class User {
-    public String userName;
     public String email;
     public String membership;
 
@@ -16,17 +15,13 @@ public class User {
 
 
 
-    public User(String userName, String email, String membership) {
-        this.userName = userName;
+    public User(String email, String membership) {
         this.email = email;
         this.membership = membership;
     }
 
 
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
 
 
@@ -39,8 +34,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
+                "email='" + email + '\'' +
                 ", membership='" + membership + '\'' +
                 '}';
     }

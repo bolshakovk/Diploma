@@ -53,7 +53,8 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.registrationButton.setOnClickListener(new View.OnClickListener() {
+        assert binding.registerView != null;
+        binding.registerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
@@ -90,6 +91,7 @@ public class FirstFragment extends Fragment {
             binding.passwordLoginText.requestFocus();
         }
         mAuth = FirebaseAuth.getInstance();
+        binding.progressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -105,8 +107,10 @@ public class FirstFragment extends Fragment {
                                 Log.d("tag", String.valueOf(snapshot.child(currentUser.getUid()).child("membership")));
                                 if (String.valueOf(snapshot.child(currentUser.getUid()).child("membership")).contains("Admin")) {
                                     Log.d("tag", "somebody with membership Admin");
+                                    binding.progressBar.setVisibility(View.GONE);
                                 }else if (String.valueOf(snapshot.child(currentUser.getUid()).child("membership")).contains("Employer")){
                                     Log.d("tag", "somebody with membership Employer");
+                                    binding.progressBar.setVisibility(View.GONE);
                                 }
                             }
                         }

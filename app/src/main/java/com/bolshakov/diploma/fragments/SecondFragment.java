@@ -93,17 +93,10 @@ public class SecondFragment extends Fragment {
     @SuppressLint("ResourceType")
     private void registerUser(){
         String email = binding.emailRegText.getText().toString().trim();
-        String username = binding.usernameRegText.getText().toString().trim();
         String password = binding.passwordRegText.getText().toString().trim();
         String confirmPassword = binding.passwordConfirmText.getText().toString().trim();
         RadioButton employerRadioButton = binding.employerRadioButton;
 
-        if (username.isEmpty()){
-            Log.d("tag", username);
-            binding.usernameRegText.setError("username is required!");
-            binding.usernameRegText.requestFocus();
-            return;
-        }
 
         if (password.isEmpty()){
             binding.passwordRegText.setError("password is required!");
@@ -144,23 +137,24 @@ public class SecondFragment extends Fragment {
 
 
 
-
+        binding.progressRegBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    User user = new User(username, email, role);
+                    User user = new User(email, role);
                     FirebaseDatabase.getInstance().getReference("Users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
+                                binding.progressRegBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                Log.d("user", user.toString());
 
                             }else{
                                 Toast.makeText(getActivity(), "User has NOT been registered successfully", Toast.LENGTH_LONG).show();
+                                binding.progressRegBar.setVisibility(View.GONE);
                             }
                         }
                     });
