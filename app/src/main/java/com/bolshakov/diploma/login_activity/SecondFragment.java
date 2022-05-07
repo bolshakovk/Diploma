@@ -1,46 +1,33 @@
-package com.bolshakov.diploma.fragments;
+package com.bolshakov.diploma.login_activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.bolshakov.diploma.AdminActivity;
-import com.bolshakov.diploma.EmployerActivity;
-import com.bolshakov.diploma.User;
 import com.bolshakov.diploma.databinding.FragmentSecondBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.bolshakov.diploma.models.User;
+import com.bolshakov.diploma.configs.Config;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
+import java.util.Objects;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser currentUser = mAuth.getCurrentUser();
-    public DatabaseReference databaseReference;
     String role;
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
 
@@ -58,36 +45,16 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        binding.employerRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employer";
-            }
-        });
-        binding.radioAdminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Admin";
-            }
-        });
-        binding.buttonDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerUser();
-            }
-        });
-        binding.employerRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employer";
-            }
-        });
-        binding.radioAdminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Admin";
-            }
-        });
+        binding.employerRadioButton.setOnClickListener(view1 ->
+                role = "Employer");
+        binding.radioAdminButton.setOnClickListener(view12 ->
+                role = "Admin");
+        binding.buttonDone.setOnClickListener(view13 ->
+                registerUser());
+        binding.employerRadioButton.setOnClickListener(view14 ->
+                role = "Employer");
+        binding.radioAdminButton.setOnClickListener(view15 ->
+                role = "Admin");
     }
 
     @SuppressLint("ResourceType")
@@ -95,7 +62,6 @@ public class SecondFragment extends Fragment {
         String email = binding.emailRegText.getText().toString().trim();
         String password = binding.passwordRegText.getText().toString().trim();
         String confirmPassword = binding.passwordConfirmText.getText().toString().trim();
-        RadioButton employerRadioButton = binding.employerRadioButton;
 
 
         if (password.isEmpty()){
@@ -133,22 +99,14 @@ public class SecondFragment extends Fragment {
             return;
         }
 
-
-
-
-
         binding.progressRegBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    User user = new User(email, role);
-                    FirebaseDatabase.getInstance().getReference("Users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                User user = new User(email, role);
+                FirebaseDatabase.getInstance().getReference(Config.USERS)
+                        .child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                        .setValue(user).addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()){
                                 binding.progressRegBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "User has been registered successfully", Toast.LENGTH_LONG).show();
 
@@ -156,9 +114,7 @@ public class SecondFragment extends Fragment {
                                 Toast.makeText(getActivity(), "User has NOT been registered successfully", Toast.LENGTH_LONG).show();
                                 binding.progressRegBar.setVisibility(View.GONE);
                             }
-                        }
-                    });
-                }
+                        });
             }
         });
     }
