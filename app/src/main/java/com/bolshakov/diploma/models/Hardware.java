@@ -12,6 +12,9 @@ public class Hardware {
         this.cost = cost;
     }
 
+    public Hardware() {
+    }
+
     public String getParams() {
         return params;
     }
@@ -34,5 +37,15 @@ public class Hardware {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Hardware{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", params='" + params + '\'' +
+                ", cost='" + cost + '\'' +
+                '}';
     }
 }
