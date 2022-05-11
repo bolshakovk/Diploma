@@ -5,11 +5,13 @@ public class Hardware {
     public String name;
     public String params;
     public String cost;
+    public String isActive;
 
-    public Hardware(String name, String params, String cost) {
+    public Hardware(String name, String params, String cost, String isActive) {
         this.name = name;
         this.params = params;
         this.cost = cost;
+        this.isActive = isActive;
     }
 
     public Hardware() {

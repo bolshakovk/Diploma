@@ -86,7 +86,6 @@ public class FirstFragment extends Fragment {
             if (task.isSuccessful()){
                 currentUser = mAuth.getCurrentUser();
                 assert currentUser != null;
-                Log.d("tag", currentUser.getUid());
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child(Config.USERS).addValueEventListener(new ValueEventListener() {
                     @Override

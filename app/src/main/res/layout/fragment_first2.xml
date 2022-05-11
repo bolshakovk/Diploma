@@ -8,10 +8,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHardware"
-        android:layout_width="230dp"
-        android:layout_height="547dp"
-        tools:layout_editor_absoluteX="68dp"
-        tools:layout_editor_absoluteY="124dp" />
+        android:layout_width="408dp"
+        android:layout_height="514dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="117dp" />
 
     <TextView
         android:id="@+id/graphView"

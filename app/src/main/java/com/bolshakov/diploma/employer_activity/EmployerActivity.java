@@ -9,8 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bolshakov.diploma.configs.Config;
+import com.bolshakov.diploma.database_helper.FirebaseDatabaseHelper;
 import com.bolshakov.diploma.databinding.ActivityEmployerBinding;
 import com.bolshakov.diploma.login_activity.MainActivity;
 import com.bolshakov.diploma.models.Hardware;
@@ -20,9 +22,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
+
 public class EmployerActivity extends AppCompatActivity {
     public ActivityEmployerBinding binding;
-    public DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +81,7 @@ public class EmployerActivity extends AppCompatActivity {
                 binding.hardwareCostText.setError("Cost must be numeric!");
                 binding.hardwareCostText.requestFocus();
             }
-        }
+        }/*
         databaseReference = FirebaseDatabase.getInstance().getReference(Config.DATA);
         MutableLiveData<Exception> mutableLiveData = new MutableLiveData<>();
         LiveData<Exception> liveData = new LiveData<Exception>() {
@@ -98,6 +101,28 @@ public class EmployerActivity extends AppCompatActivity {
                 }else {
                     mutableLiveData.setValue(task.getException());
                 }
+            }
+        });*/
+        Hardware hardware = new Hardware(name, param, cost, "true");
+        new FirebaseDatabaseHelper().addHardware(hardware, new FirebaseDatabaseHelper.DataStatus() {
+            @Override
+            public void DataIsLoaded(List<Hardware> hardwareList, List<String> keys) {
+                Toast.makeText(EmployerActivity.this, "Data inserted succsessfully ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void DataIsInserted() {
+
+            }
+
+            @Override
+            public void DataIsUpdated() {
+
+            }
+
+            @Override
+            public void DataIsDeleted() {
+
             }
         });
     }
