@@ -5,9 +5,9 @@ public class Hardware {
     public String name;
     public String params;
     public String cost;
-    public String isActive;
+    public boolean isActive;
 
-    public Hardware(String name, String params, String cost, String isActive) {
+    public Hardware(String name, String params, String cost, boolean isActive) {
         this.name = name;
         this.params = params;
         this.cost = cost;
@@ -45,6 +45,7 @@ public class Hardware {
     public String toString() {
         return "Hardware{" +
                 "id='" + id + '\'' +
+                ", isActive='" + isActive + '\'' +
                 ", name='" + name + '\'' +
                 ", params='" + params + '\'' +
                 ", cost='" + cost + '\'' +

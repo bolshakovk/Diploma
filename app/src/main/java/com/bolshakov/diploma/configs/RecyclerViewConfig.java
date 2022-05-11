@@ -26,14 +26,15 @@ import java.util.Objects;
 public class RecyclerViewConfig {
     private Context context;
     private HardwareAdapter hardwareAdapter;
-    private RecyclerView ownRecyclerView;
     public ItemTouchHelper.SimpleCallback simpleCallback;
+    private List<Hardware> myHwList;
 
     public void setConfig(RecyclerView recyclerView, Context c, List<Hardware> hardwareList, List<String> keys) {
         context = c;
         hardwareAdapter = new HardwareAdapter(hardwareList, keys);
         recyclerView.setLayoutManager(new LinearLayoutManager(c));
         recyclerView.setAdapter(hardwareAdapter);
+        myHwList = hardwareList;
         simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
 
             @Override
@@ -75,11 +76,11 @@ public class RecyclerViewConfig {
 
     class HardwareItemView extends RecyclerView.ViewHolder {
 
-        private TextView tName;
-        private TextView tCost;
-        private TextView tDescription;
+        private final TextView tName;
+        private final TextView tCost;
+        private final TextView tDescription;
         private String key;
-        private String value = "False";
+        private final String value = "False";
         public HardwareItemView(ViewGroup parent) {
             super(LayoutInflater.from(context).
                     inflate(R.layout.hardware_list_item, parent, false));
@@ -87,50 +88,45 @@ public class RecyclerViewConfig {
             tName = (TextView)itemView.findViewById(R.id.nameTextView);
             tCost = (TextView)itemView.findViewById(R.id.costTextView);
             tDescription = (TextView)itemView.findViewById(R.id.descriptionTextView);
-
+            Hardware hardware = new Hardware();
             itemView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    Hardware hardware = new Hardware();
+
                     hardware.name = tName.getText().toString();
                     hardware.cost = tCost.getText().toString();
                     hardware.params = tDescription.getText().toString();
-                    hardware.isActive = "false";
-                    if (hardware.isActive.equals("true")){
-                        hardware.isActive = "false";
+
+                    for (Hardware item : myHwList){
+                        if (item.id.equals(key)){
+                            item.isActive = !item.isActive;
+                            new FirebaseDatabaseHelper().updateHardware(key, item, new FirebaseDatabaseHelper.DataStatus() {
+                                @Override
+                                public void DataIsLoaded(List<Hardware> hardwareList, List<String> keys) {
+                                    Toast.makeText(context.getApplicationContext(), value, Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void DataIsInserted() {
+
+                                }
+
+                                @Override
+                                public void DataIsUpdated() {
+
+                                }
+
+                                @Override
+                                public void DataIsDeleted() {
+
+                                }
+                            });
+                            Toast.makeText(context.getApplicationContext(), item.name + " is active: " + item.isActive, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    else if (hardware.isActive.equals("false")){
-                        hardware.isActive = "true";
-                    }
 
-                    new FirebaseDatabaseHelper().updateHardware(key, hardware, new FirebaseDatabaseHelper.DataStatus() {
-                        @Override
-                        public void DataIsLoaded(List<Hardware> hardwareList, List<String> keys) {
-                            Toast.makeText(context.getApplicationContext(), value, Toast.LENGTH_LONG).show();
-                        }
 
-                        @Override
-                        public void DataIsInserted() {
-
-                        }
-
-                        @Override
-                        public void DataIsUpdated() {
-
-                        }
-
-                        @Override
-                        public void DataIsDeleted() {
-
-                        }
-                    });
-
-                    if (value.equals("False")){
-                        value = "True";
-                    } else if (value.equals("True")){
-                        value = "False";
-                    }
-                    Toast.makeText(context.getApplicationContext(), value, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -142,8 +138,8 @@ public class RecyclerViewConfig {
         }
     }
     class HardwareAdapter extends RecyclerView.Adapter<HardwareItemView>{
-        private List<Hardware> hardwareList;
-        private List<String> keys;
+        private final List<Hardware> hardwareList;
+        private final List<String> keys;
 
         @NonNull
         @Override

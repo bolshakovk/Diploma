@@ -33,7 +33,7 @@ public class FirebaseDatabaseHelper {
         databaseReference = firebaseDatabase.getReference();
     }
     public void updateHardware(String key, Hardware hardware, final DataStatus dataStatus){
-        hardware.id = databaseReference.push().getKey();
+        hardware.id = key;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(Config.DATA);
         databaseReference.child(key).setValue(hardware).addOnSuccessListener(new OnSuccessListener<Void>() {

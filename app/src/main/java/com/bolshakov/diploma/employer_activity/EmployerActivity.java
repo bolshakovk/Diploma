@@ -103,7 +103,7 @@ public class EmployerActivity extends AppCompatActivity {
                 }
             }
         });*/
-        Hardware hardware = new Hardware(name, param, cost, "true");
+        Hardware hardware = new Hardware(name, param, cost, true);
         new FirebaseDatabaseHelper().addHardware(hardware, new FirebaseDatabaseHelper.DataStatus() {
             @Override
             public void DataIsLoaded(List<Hardware> hardwareList, List<String> keys) {
