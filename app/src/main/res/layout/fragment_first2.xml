@@ -11,16 +11,26 @@
         android:layout_width="408dp"
         android:layout_height="514dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="217dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/graphView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Graph"
-        tools:layout_editor_absoluteX="186dp"
-        tools:layout_editor_absoluteY="198dp" />
+        tools:layout_editor_absoluteX="287dp"
+        tools:layout_editor_absoluteY="617dp" />
+
+    <Button
+        android:id="@+id/graphButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Graph"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewHardware" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bolshakov.diploma.R;
 import com.bolshakov.diploma.databinding.FragmentSecond2Binding;
-
+import com.bolshakov.diploma.models.Edge;
 
 
 public class Second2Fragment extends Fragment {
@@ -31,8 +31,6 @@ public class Second2Fragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     @Override
