@@ -59,6 +59,6 @@ public class ForgotActivity extends AppCompatActivity {
                     Toast.makeText(ForgotActivity.this, "Something went wrong, try again", Toast.LENGTH_LONG).show();
                 }
             }
-        })
+        });
     }
 }

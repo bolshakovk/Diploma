@@ -70,8 +70,6 @@ public class RecyclerViewConfig {
             }
         };
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
-
-
     }
 
     class HardwareItemView extends RecyclerView.ViewHolder {
@@ -125,8 +123,6 @@ public class RecyclerViewConfig {
                             Toast.makeText(context.getApplicationContext(), item.name + " is active: " + item.isActive, Toast.LENGTH_SHORT).show();
                         }
                     }
-
-
                 }
             });
         }

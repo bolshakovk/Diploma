@@ -8,29 +8,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHardware"
-        android:layout_width="408dp"
-        android:layout_height="514dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/graphView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Graph"
-        tools:layout_editor_absoluteX="287dp"
-        tools:layout_editor_absoluteY="617dp" />
+        android:layout_width="414dp"
+        android:layout_height="530dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-1dp" />
 
     <Button
         android:id="@+id/graphButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Graph"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewHardware"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewHardware" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

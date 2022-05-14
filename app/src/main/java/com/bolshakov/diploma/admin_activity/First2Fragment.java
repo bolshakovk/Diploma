@@ -16,6 +16,7 @@ import com.bolshakov.diploma.databinding.FragmentFirst2Binding;
 import com.bolshakov.diploma.models.Hardware;
 
 import java.util.List;
+import java.util.Objects;
 
 public class First2Fragment extends Fragment {
 
