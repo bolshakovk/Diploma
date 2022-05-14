@@ -2,7 +2,6 @@ package com.bolshakov.diploma.admin_activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bolshakov.diploma.configs.RecyclerViewConfig;
+import com.bolshakov.diploma.adapters.RecyclerViewConfig;
 import com.bolshakov.diploma.database_helper.FirebaseDatabaseHelper;
 import com.bolshakov.diploma.databinding.FragmentFirst2Binding;
 import com.bolshakov.diploma.models.Hardware;

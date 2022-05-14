@@ -1,4 +1,4 @@
-package com.bolshakov.diploma;
+package com.bolshakov.diploma.feautures;
 
 import android.content.Context;
 import android.content.SharedPreferences;

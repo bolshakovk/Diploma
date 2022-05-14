@@ -7,23 +7,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.bolshakov.diploma.configs.RecyclerViewConfig;
 import com.bolshakov.diploma.database_helper.FirebaseDatabaseHelper;
 import com.bolshakov.diploma.models.Hardware;
-import com.google.firebase.database.DataSnapshot;
+import com.bolshakov.diploma.drawing.Vertex;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GraphActivity extends AppCompatActivity {
     int count;
     List<Hardware> tmpList;
+    List<Vertex> vertexList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +48,9 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(new DrawView(this));
     }
     class DrawView extends View{
+        int index = 1;
         Paint p;
+
         public DrawView(Context context) {
             super(context);
             p = new Paint();
@@ -62,16 +61,16 @@ public class GraphActivity extends AppCompatActivity {
         @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas){
-            for (Hardware item : tmpList){
-                if (item.isActive){
+                for (Hardware item : tmpList){
+                    index ++;
                     p.setColor(Color.GREEN);
-                    canvas.drawCircle(500, 100, 50, p);
-                }else{
-                    p.setColor(Color.RED);
-                    canvas.drawCircle(200 , 100,50, p);
-                }
+                    if (item.isActive){
+                        p.setColor(Color.RED);
+                    }
 
-            }
+
+                    canvas.drawCircle(100 * index * 2 , 100,50, p);
+                }
         }
     }
 }

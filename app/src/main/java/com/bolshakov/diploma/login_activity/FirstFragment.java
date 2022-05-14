@@ -56,6 +56,13 @@ public class FirstFragment extends Fragment {
         assert binding.logInButton != null;
         binding.logInButton.setOnClickListener(view12 ->
                 loginUser());
+        binding.forgotView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ForgotActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     private void loginUser(){
         String email = binding.usernameLoginText.getText().toString().trim();

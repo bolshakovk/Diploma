@@ -1,4 +1,4 @@
-package com.bolshakov.diploma.configs;
+package com.bolshakov.diploma.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
